@@ -2,37 +2,32 @@ name: Hourly ATIS Scraper
 
 on:
   schedule:
-    - cron: '0 * * * *'  # UTC 时间每小时整点触发
-  workflow_dispatch:      # 允许手动触发测试
-
-env:
-  # 强制使用 Node.js 24 环境，消除弃用警告
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+    - cron: '0 * * * *'  # 协调世界时 (UTC) 每小时整点触发
+  workflow_dispatch:      # 允许你点击按钮手动运行，方便测试
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    # 开启写入权限，使脚本能提交日志
+    # 必须开启写入权限，否则脚本无法把 log 提交回仓库
     permissions:
       contents: write
 
     steps:
       - name: Checkout code
-        # 升级为最新 v5 版本
+        # 升级为最新 v5 版本，消除 Node.js 20 弃用警告
         uses: actions/checkout@v5
 
       - name: Set up Python
-        # 升级为最新 v5 版本
+        # 升级为最新 v5 版本，消除 Node.js 20 弃用警告
         uses: actions/setup-python@v5
         with:
           python-version: '3.9'
 
       - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install requests beautifulsoup4 pytz
+        run: pip install requests beautifulsoup4 pytz
 
       - name: Run Scraper
+        # 确保使用你整理过的、去除了多余空行的 scraper.py 代码
         run: python scraper.py
 
       - name: Commit and Push changes
@@ -40,16 +35,15 @@ jobs:
           git config --global user.name "GitHub Action"
           git config --global user.email "action@github.com"
           
-          # 添加所有更改
+          # 添加所有更改，包括生成的按日命名的 txt 文件
           git add .
           
-          # 仅在有更改时进行本地提交，防止报错
+          # 只有在有更改时才提交，防止脚本报错
+          # 虽然你目前的日志显示是有提交的，但加上这个会让脚本更健壮
           git commit -m "Update compact ATIS log for $(date)" || echo "No changes to commit"
           
-          # 【关键修复】
-          # 在 push 之前，先执行 rebase 拉取。
-          # 这会获取远程的最新提交，并把你本地的提交“重放”在其顶端。
-          # 这样能避免非快进式错误，创造一个干净的线性历史。
+          # 【关键修改】在 push 之前，先执行 rebase 拉取。
+          # 这会拉取远程 main 分支的最新提交，并把你本地的提交“重放”在其顶端。
           git pull --rebase origin main
           
           # 推送更改
