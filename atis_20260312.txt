@@ -20,3 +20,25 @@ ATIS will be updated whenever there are significant changes in content. Owing
 to technical differences such as averaging periods, reference locations and
 updating mechanisms, the meteorological information shown on the ATIS might be
 different from that available on the Aviation Weather Report Page.
+[HKT: 23:59]
+Automatic Terminal Information Service (ATIS)
+Hong Kong International Airport (HKIA)
+ARRIVAL
+VHHH ARR ATIS J 1503Z.
+ARRIVALS, RWY 07C.
+EXP ILS  APCH, RWY 07C.
+RWY 07R MAY BE AVAILABLE FOR RNP AR APPROVED CARGO FLIGHTS UPON REQUEST.
+CAUTION POSSIBLE GP FLUCTUATION RWY 07C AND RWY 07R.
+WIND 100/16KT CAVOK T20 DP12 QNH 1021HPA=
+ACKNOWLEDGE INFO J ON FIRST CTC WITH APP.
+DEPARTURE
+VHHH DEP ATIS U 1504Z.
+DEPARTURES, RWY 07R.
+WIND 110/15KT CAVOK T20 DP12 QNH 1021HPA=
+ACKNOWLEDGE INFO U ON FIRST CTC WITH DELIVERY .
+Remarks:
+The
+ATIS will be updated whenever there are significant changes in content. Owing
+to technical differences such as averaging periods, reference locations and
+updating mechanisms, the meteorological information shown on the ATIS might be
+different from that available on the Aviation Weather Report Page.
