@@ -14,12 +14,10 @@ jobs:
 
     steps:
       - name: Checkout code
-        # 升级为最新 v5 版本，消除 Node.js 20 弃用警告
-        uses: actions/checkout@v5
+        uses: actions/checkout@v4
 
       - name: Set up Python
-        # 升级为最新 v5 版本，消除 Node.js 20 弃用警告
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v4
         with:
           python-version: '3.9'
 
@@ -27,24 +25,14 @@ jobs:
         run: pip install requests beautifulsoup4 pytz
 
       - name: Run Scraper
-        # 确保使用你整理过的、去除了多余空行的 scraper.py 代码
         run: python scraper.py
 
       - name: Commit and Push changes
         run: |
           git config --global user.name "GitHub Action"
           git config --global user.email "action@github.com"
-          
-          # 添加所有更改，包括生成的按日命名的 txt 文件
-          git add .
-          
-          # 只有在有更改时才提交，防止脚本报错
-          # 虽然你目前的日志显示是有提交的，但加上这个会让脚本更健壮
-          git commit -m "Update compact ATIS log for $(date)" || echo "No changes to commit"
-          
-          # 【关键修改】在 push 之前，先执行 rebase 拉取。
-          # 这会拉取远程 main 分支的最新提交，并把你本地的提交“重放”在其顶端。
-          git pull --rebase origin main
-          
-          # 推送更改
+          # 使用 git add . 确保所有新创建的 txt 文件都被添加
+          git add .  
+          # 只有在有变动时才提交，防止脚本报错
+          git commit -m "Update ATIS log for $(date)" || echo "No changes to commit"
           git push
