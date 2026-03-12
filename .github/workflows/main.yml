@@ -1,0 +1,38 @@
+name: Hourly ATIS Scraper
+
+on:
+  schedule:
+    - cron: '0 * * * *'  # 协调世界时 (UTC) 每小时整点触发
+  workflow_dispatch:      # 允许你点击按钮手动运行，方便测试
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    # 必须开启写入权限，否则脚本无法把 log 提交回仓库
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Install dependencies
+        run: pip install requests beautifulsoup4 pytz
+
+      - name: Run Scraper
+        run: python scraper.py
+
+      - name: Commit and Push changes
+        run: |
+          git config --global user.name "GitHub Action"
+          git config --global user.email "action@github.com"
+          # 使用 git add . 确保所有新创建的 txt 文件都被添加
+          git add .  
+          # 只有在有变动时才提交，防止脚本报错
+          git commit -m "Update ATIS log for $(date)" || echo "No changes to commit"
+          git push
