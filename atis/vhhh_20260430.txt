@@ -1,0 +1,2 @@
+[HKT: 01:16]
+Error fetching ATIS: HTTPSConnectionPool(host='atis.cad.gov.hk', port=443): Read timed out.
